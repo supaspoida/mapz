@@ -1,9 +1,23 @@
+require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/filters'
+require 'active_support/core_ext/string/inquiry'
 
 class Parse < Struct.new(:text)
 
   def shows
     text.split("\n").map &Show.method(:new)
+  end
+
+  class Geocode < Struct.new(:results)
+
+    def locality
+      (results? ? "geocoded" : "").inquiry
+    end
+
+    def results?
+      results.present?
+    end
+
   end
 
   class Show < Struct.new(:raw)

@@ -15,6 +15,24 @@ describe Parse do
   end
 end
 
+describe Parse::Geocode do
+  subject do
+    described_class.new(results)
+  end
+
+  context 'failure' do
+    let(:results) { [] }
+
+    its(:locality) { should_not be_geocoded }
+  end
+
+  context 'success' do
+    let(:results) { [stub] }
+
+    its(:locality) { should be_geocoded }
+  end
+end
+
 describe Parse::Show do
   let(:raw) do
     'Bisco |  08/21/03 |  Crocodile Rock |  Allentown, PA |  Setlist'
