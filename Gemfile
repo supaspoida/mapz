@@ -1,8 +1,10 @@
 source :rubygems
 
+gem 'bson_ext'
 gem 'deep_struct'
 gem 'hashrocket-rails'
 gem 'jquery-rails'
+gem 'mongoid'
 gem 'rails', '3.2.1'
 
 group :assets do
