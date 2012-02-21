@@ -4,6 +4,14 @@ require 'active_support/core_ext/string/inquiry'
 
 class Parse < Struct.new(:text)
 
+  def self.run(filename)
+    new(File.read(filename)).persist
+  end
+
+  def persist
+    shows.map &:persist
+  end
+
   def shows
     text.split("\n").map &Show.method(:new)
   end
@@ -38,6 +46,15 @@ class Parse < Struct.new(:text)
 
     def city
       city_and_state[0]
+    end
+
+    def inspect
+      "%s - %s, %s, %s" % [date, venue, city, state]
+    end
+
+    def persist
+      $stdout.puts inspect
+      ::Show.create(attributes)
     end
 
     def state
