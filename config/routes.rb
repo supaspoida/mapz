@@ -1,4 +1,6 @@
 Mapz::Application.routes.draw do
+  match '/ui(/:action)', controller: 'ui'
+
   # The priority is based upon order of creation:
   # first created -> highest priority.
 
