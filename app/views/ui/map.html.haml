@@ -1,1 +1,4 @@
-%h1 Hello From Map!
+- content_for :head do
+  = javascript_include_tag "http://maps.googleapis.com/maps/api/js?key=#{AppEnv[:google_maps_api_key]}&sensor=false"
+
+#map
