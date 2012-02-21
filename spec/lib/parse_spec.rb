@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'slim_spec_helper'
 require 'parse'
 
 describe Parse do
