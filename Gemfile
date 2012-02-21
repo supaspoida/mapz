@@ -1,6 +1,7 @@
 source :rubygems
 
 gem 'deep_struct'
+gem 'hashrocket-rails'
 gem 'jquery-rails'
 gem 'rails', '3.2.1'
 
