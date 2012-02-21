@@ -22,6 +22,12 @@ class Parse < Struct.new(:text)
 
   class Show < Struct.new(:raw)
 
+    def attributes
+      [:venue, :city, :state, :date].each_with_object({}) do |key, hsh|
+        hsh[key] = send(key)
+      end
+    end
+
     def raw
       super.squish
     end

@@ -47,4 +47,10 @@ describe Parse::Show do
   its(:city) { should == 'Allentown' }
   its(:state) { should == 'PA' }
   its(:date) { should == '08/21/03' }
+  its(:attributes) do
+    should == { venue: 'Crocodile Rock',
+                city: 'Allentown',
+                state: 'PA',
+                date: '08/21/03' }
+  end
 end
