@@ -12,6 +12,7 @@ class Geocode
       geocode
     else
       create from_locality(locality).merge(key: key)
+      sleep 1
     end
   end
 
