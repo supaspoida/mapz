@@ -7,13 +7,14 @@ $ ->
   bounds = new google.maps.LatLngBounds
 
   markers = $.map Shows, (show) ->
-    new google.maps.LatLng(show.lat, show.lng)
-
-  $.each markers, (i, marker) ->
-    bounds.extend marker
+    position = new google.maps.LatLng(show.lat, show.lng)
     new google.maps.Marker
-      position: marker
-      map: map
+      position: position
       title: 'show'
 
+  $.each markers, (i, marker) ->
+    bounds.extend marker.position
+
   map.fitBounds bounds
+
+  new MarkerClusterer map, markers
