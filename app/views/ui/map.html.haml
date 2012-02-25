@@ -1,7 +1,5 @@
 - content_for :head do
   = javascript_include_tag "http://maps.googleapis.com/maps/api/js?key=#{AppEnv[:google_maps_api_key]}&sensor=false"
-  = javascript_include_tag "vendor/markerclusterer"
-  = javascript_include_tag "map"
   %script{type: 'text/javascript'}
     window.Shows = #{markers}
 

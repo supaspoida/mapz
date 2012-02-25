@@ -1,3 +1,5 @@
+#= require 'vendor/markerclusterer'
+
 $ ->
   map = new google.maps.Map document.getElementById("map"),
     center: new google.maps.LatLng(-34.397, 150.644)
