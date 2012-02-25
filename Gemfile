@@ -6,7 +6,9 @@ gem 'hashrocket-rails'
 gem 'heroku'
 gem 'jquery-rails'
 gem 'mongoid'
+gem 'foursquare_venues'
 gem 'rails', '3.2.1'
+gem 'typhoeus'
 
 group :assets do
   gem 'coffee-rails', '~> 3.2.1'
