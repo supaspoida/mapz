@@ -54,7 +54,7 @@ class Parse < Struct.new(:text)
 
     def persist
       $stdout.puts inspect
-      ::Show.create(attributes)
+      ::Show.persist(attributes)
     end
 
     def state
