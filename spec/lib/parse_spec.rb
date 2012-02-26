@@ -15,9 +15,45 @@ describe Parse do
   end
 end
 
+class City
+  NotFound = Class.new(RuntimeError)
+end
+
 describe Parse::City do
+  describe '.locate' do
+    let(:locate) do
+      described_class.locate('New York, NY')
+    end
 
+    subject { locate }
 
+    context 'when cached city exists' do
+      let(:cached_city) { stub }
+
+      before do
+        City.stub(:locate).with('New York, NY') { cached_city }
+      end
+
+      it { should == cached_city }
+    end
+
+    context 'when city is not cached' do
+      let(:geocode) { stub(center: []) }
+
+      before do
+        Parse::Geocoder.stub(:locate) { geocode }
+        City.stub(:locate).with('New York, NY').and_raise(City::NotFound)
+        City.stub(:save_geocode)
+      end
+
+      it { should == geocode }
+
+      it 'stores the city' do
+        City.should_receive(:save_geocode).with(geocode)
+        locate
+      end
+    end
+  end
 end
 
 describe Parse::Show do

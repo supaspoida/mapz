@@ -16,7 +16,20 @@ class Parse < Struct.new(:text)
     text.split("\n").map &Show.method(:new)
   end
 
+  Geocoder = Class.new
+
   class City < Struct.new(:locality)
+
+    def self.locate(query, geocoder=Geocoder)
+      begin
+        ::City.locate(query)
+      rescue ::City::NotFound
+        geocode = geocoder.locate(query)
+        ::City.save_geocode(geocode)
+        geocode
+      end
+    end
+
   end
 
   class Show < Struct.new(:raw)
