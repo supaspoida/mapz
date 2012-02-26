@@ -15,6 +15,22 @@ describe Parse do
   end
 end
 
+describe Parse::City do
+  subject do
+    described_class.new(locality)
+  end
+
+  context "when 'New York, NY'" do
+    let(:locality) { 'New York, NY' }
+    its(:key) { should == 'new-york-ny' }
+  end
+
+  context "when 'Jacksonville Beach, FL'" do
+    let(:locality) { 'Jacksonville Beach, FL' }
+    its(:key) { should == 'jacksonville-beach-fl' }
+  end
+end
+
 describe Parse::Show do
   let(:raw) do
     'Bisco |  08/21/03 |  Crocodile Rock |  Allentown, PA |  Setlist'
