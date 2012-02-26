@@ -1,2 +1,0 @@
-require 'geocoder'
-require 'parse'
