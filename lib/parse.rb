@@ -16,18 +16,6 @@ class Parse < Struct.new(:text)
     text.split("\n").map &Show.method(:new)
   end
 
-  class Geocode < Struct.new(:results)
-
-    def locality
-      (results? ? "geocoded" : "").inquiry
-    end
-
-    def results?
-      results.present?
-    end
-
-  end
-
   class Show < Struct.new(:raw)
 
     def attributes
