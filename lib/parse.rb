@@ -1,6 +1,5 @@
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/filters'
-require 'active_support/core_ext/string/inflections'
 require 'active_support/core_ext/string/inquiry'
 
 class Parse < Struct.new(:text)
@@ -18,11 +17,6 @@ class Parse < Struct.new(:text)
   end
 
   class City < Struct.new(:locality)
-
-    def key
-      locality.parameterize
-    end
-
   end
 
   class Show < Struct.new(:raw)
