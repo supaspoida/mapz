@@ -1,1 +1,1 @@
-rvm use --create 1.9.3-p0-falcon@mapz
+rvm use --create 1.9.3@mapz
