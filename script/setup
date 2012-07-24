@@ -1,0 +1,10 @@
+#!/bin/sh
+set -e
+
+gem install bundler --pre
+bundle
+
+git remote add staging    git@heroku.com:mapz-staging.git
+git remote add production git@heroku.com:mapz-production.git
+
+rake
