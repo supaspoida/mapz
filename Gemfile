@@ -1,6 +1,7 @@
 source :rubygems
 
 gem 'active_attr'
+gem 'chronic'
 gem 'bson_ext'
 gem 'deep_struct'
 gem 'hashrocket-rails'
