@@ -1,5 +1,6 @@
 source :rubygems
 
+gem 'active_attr'
 gem 'bson_ext'
 gem 'deep_struct'
 gem 'hashrocket-rails'
