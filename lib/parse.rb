@@ -13,7 +13,7 @@ class Parse < Struct.new(:text)
   end
 
   def shows
-    text.split("\n").map &Show.method(:new)
+    text.split("\n").map &Title.method(:new)
   end
 
   Geocoder = Class.new
@@ -32,7 +32,7 @@ class Parse < Struct.new(:text)
 
   end
 
-  class Show < Struct.new(:raw)
+  class Title < Struct.new(:raw)
 
     def attributes
       [:venue, :city, :state, :date].each_with_object({}) do |key, hsh|

@@ -56,7 +56,7 @@ describe Parse::City do
   end
 end
 
-describe Parse::Show do
+describe Parse::Title do
   let(:raw) do
     '08/21/03 - Crocodile Rock - Allentown, PA'
   end
