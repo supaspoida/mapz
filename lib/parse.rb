@@ -45,7 +45,7 @@ class Parse < Struct.new(:text)
     end
 
     def date
-      columns[1]
+      columns[0]
     end
 
     def city
@@ -66,17 +66,17 @@ class Parse < Struct.new(:text)
     end
 
     def venue
-      columns[2]
+      columns[1]
     end
 
     private
 
     def city_and_state
-      columns[3].split(', ')
+      columns[2].split(', ')
     end
 
     def columns
-      raw.split(' | ')
+      raw.split(' - ')
     end
   end
 end

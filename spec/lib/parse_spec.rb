@@ -58,13 +58,13 @@ end
 
 describe Parse::Show do
   let(:raw) do
-    'Bisco |  08/21/03 |  Crocodile Rock |  Allentown, PA |  Setlist'
+    '08/21/03 - Crocodile Rock - Allentown, PA'
   end
 
   subject { described_class.new(raw) }
 
   its(:raw) do
-    should == 'Bisco | 08/21/03 | Crocodile Rock | Allentown, PA | Setlist'
+    should == '08/21/03 - Crocodile Rock - Allentown, PA'
   end
   its(:venue) { should == 'Crocodile Rock' }
   its(:city) { should == 'Allentown' }
