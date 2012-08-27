@@ -5,7 +5,7 @@ require 'active_support/core_ext/string/inquiry'
 class Parse < Struct.new(:text)
 
   def self.run(filename)
-    new(File.read(filename)).persist
+    new(File.read(filename))
   end
 
   def persist
