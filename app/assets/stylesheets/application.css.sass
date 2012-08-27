@@ -10,5 +10,31 @@ html, body, #map
   padding: 0
   height: 100%
 
+.d3
+  .background
+    fill: none
+    pointer-events: all
+
+  #states
+    fill: #aaa
+    stroke: #fff
+    stroke-width: 1.5px
+    .active
+      fill: steelblue
+
+.callout
+  +border-radius(20px)
+  border: 1px solid black
+  display: none
+  font-size: 28px
+  left: 20px
+  padding: 10px 0
+  position: absolute
+  top: 20px
+  width: 500px
+
+  & > h1, .shows, .venues
+    padding: 0 20px
+
 #timeline
   background-color: #ff5e1a
