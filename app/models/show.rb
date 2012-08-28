@@ -6,10 +6,6 @@ class Show
   field :state
   field :venue
 
-  def self.persist(attributes)
-    create(attributes).geocode
-  end
-
   def self.timeline
     Timeline.new all
   end

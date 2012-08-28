@@ -8,8 +8,8 @@ class Parse < Struct.new(:text)
     new(File.read(filename))
   end
 
-  def persist
-    shows.map &:persist
+  def json
+    JSON.parse raw_json
   end
 
   def shows
@@ -54,11 +54,6 @@ class Parse < Struct.new(:text)
 
     def inspect
       "%s - %s, %s, %s" % [date, venue, city, state]
-    end
-
-    def persist
-      $stdout.puts inspect
-      ::Show.persist(attributes)
     end
 
     def state
