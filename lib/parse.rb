@@ -1,8 +1,10 @@
 require 'active_support/core_ext/object/blank'
 require 'active_support/core_ext/string/filters'
 require 'active_support/core_ext/string/inquiry'
+require 'json'
+require 'delegate'
 
-class Parse < Struct.new(:text)
+class Parse < Struct.new(:raw_json)
 
   def self.run(filename)
     new(File.read(filename))
@@ -12,8 +14,12 @@ class Parse < Struct.new(:text)
     JSON.parse raw_json
   end
 
+  def json
+    JSON.parse raw_json
+  end
+
   def shows
-    text.split("\n").map &Title.method(:new)
+    json.map &Show.method(:new)
   end
 
   Geocoder = Class.new
@@ -32,7 +38,19 @@ class Parse < Struct.new(:text)
 
   end
 
-  class Title < Struct.new(:raw)
+  class Show < SimpleDelegator
+
+    def title
+      inspect
+    end
+
+    def initialize(attributes)
+      super Title.new attributes['title']
+    end
+
+  end
+
+  class Title < SimpleDelegator
 
     def attributes
       [:venue, :city, :state, :date].each_with_object({}) do |key, hsh|
@@ -41,7 +59,7 @@ class Parse < Struct.new(:text)
     end
 
     def raw
-      super.squish
+      __getobj__.squish
     end
 
     def date

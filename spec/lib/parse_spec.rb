@@ -2,16 +2,46 @@ require 'slim_spec_helper'
 require 'parse'
 
 describe Parse do
+  let(:text) do
+    <<-json
+      [
+        { "title": "08/21/03 - Croc Rock - Allentown, PA" },
+        { "title": "08/22/03 - Bay Center - Dewey Beach, DE" }
+      ]
+    json
+  end
+
+  let(:parser) { described_class.new(text) }
+
+  subject { parser }
+
   describe 'initialization' do
-    let(:text) do
-      %{Bisco |  08/21/03 |  Crocodile Rock |  Allentown, PA |  Setlist
-        Bisco |  08/22/03 |  Bay Center |  Dewey Beach, DE |  Setlist}
+    its(:raw_json) { should == text }
+    it { should have(2).shows }
+  end
+
+  describe '#shows' do
+    let(:shows) { parser.shows }
+
+    context 'first show' do
+      subject { shows.first }
+
+      its(:title) { should == "08/21/03 - Croc Rock, Allentown, PA" }
+      its(:city)  { should == "Allentown" }
+      its(:date)  { should == "08/21/03" }
+      its(:venue) { should == "Croc Rock" }
+      its(:state) { should == "PA" }
     end
 
-    subject { described_class.new(text) }
+    context 'second show' do
+      subject { shows.last }
 
-    its(:text) { should == text }
-    its(:shows) { should have(2).shows }
+      its(:title) { should == "08/22/03 - Bay Center, Dewey Beach, DE" }
+      its(:city)  { should == "Dewey Beach" }
+      its(:date)  { should == "08/22/03" }
+      its(:venue) { should == "Bay Center" }
+      its(:state) { should == "DE" }
+    end
   end
 end
 
