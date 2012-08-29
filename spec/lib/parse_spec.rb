@@ -5,7 +5,7 @@ describe Parse do
   let(:text) do
     <<-json
       [
-        { "title": "08/21/03 - Croc Rock - Allentown, PA" },
+        { "title": "08/21/03 - Croc Rock - Patio - Allentown, PA" },
         { "title": "08/22/03 - Bay Center - Dewey Beach, DE" }
       ]
     json
@@ -26,10 +26,10 @@ describe Parse do
     context 'first show' do
       subject { shows.first }
 
-      its(:title) { should == "08/21/03 - Croc Rock, Allentown, PA" }
+      its(:title) { should == "08/21/03 - Croc Rock - Patio, Allentown, PA" }
       its(:city)  { should == "Allentown" }
       its(:date)  { should == "08/21/03" }
-      its(:venue) { should == "Croc Rock" }
+      its(:venue) { should == "Croc Rock - Patio" }
       its(:state) { should == "PA" }
     end
 

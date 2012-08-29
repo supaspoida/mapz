@@ -79,13 +79,13 @@ class Parse < Struct.new(:raw_json)
     end
 
     def venue
-      columns[1]
+      columns[1..-2].join ' - '
     end
 
     private
 
     def city_and_state
-      columns[2].split(', ')
+      columns.last.split(', ')
     end
 
     def columns
