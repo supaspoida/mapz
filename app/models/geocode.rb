@@ -6,6 +6,10 @@ class Geocode
 
   point_field :center
 
+  def self.[](shows, *callbacks)
+    shows.map { |s| locate s.locality }
+  end
+
   def self.locate(locality)
     key = locality.parameterize
     if geocode = where(key: key).first
