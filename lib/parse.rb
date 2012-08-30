@@ -3,11 +3,13 @@ require 'active_support/core_ext/string/filters'
 require 'active_support/core_ext/string/inquiry'
 require 'json'
 require 'delegate'
+require 'callbacks'
 
 class Parse < Struct.new(:raw_json)
+  extend Callbacks
 
-  def self.run(filename)
-    new(File.read(filename))
+  def self.[](file, *callbacks)
+    super { new(file).shows }
   end
 
   def json
