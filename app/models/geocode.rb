@@ -16,8 +16,9 @@ class Geocode
     if geocode = where(key: key).first
       geocode
     else
-      create from_locality(locality).merge(key: key)
+      geocode = create from_locality(locality).merge(key: key)
       sleep 1
+      geocode
     end
   end
 
