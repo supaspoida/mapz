@@ -3,6 +3,7 @@ class Geocode
   include Geo
 
   field :key
+  field :response, type: Hash
 
   point_field :center
 

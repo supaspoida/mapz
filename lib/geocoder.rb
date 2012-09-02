@@ -62,6 +62,7 @@ module Geocoder
       def to_mongo
         { center: [center.try(:lat), center.try(:lng)],
           city: city,
+          response: result,
           state: state,
           status: status
         }
