@@ -23,7 +23,6 @@ $ ->
   partition.value (d) -> d.size
 
   scale = d3.scale.linear().range([0,radius]).domain([0,1])
-  colorScale = d3.scale.quantize().domain([1,63]).range colors
 
   ringMap = [
     { innerRadius: scale(0), outerRadius: scale(0) }
@@ -38,6 +37,9 @@ $ ->
     .outerRadius((d) -> ringMap[d.depth].outerRadius)
 
   d3.json "/timelines", (json) ->
+    maxShowsPerYear = d3.max json.children, (d) -> d.size
+    colorScale = d3.scale.quantize().domain([1, maxShowsPerYear]).range colors
+
     g = svg.data([json])
            .selectAll('path')
            .data(partition.nodes)
