@@ -5,6 +5,10 @@ class Timeline < SimpleDelegator
     super({ name: 'shows', children: group[shows] })
   end
 
+  def cache
+    TimelineCache.create self
+  end
+
   def group
     ->(shows) {
       shows.group_by(&:year).map do |year,shows|

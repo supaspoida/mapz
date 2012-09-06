@@ -10,6 +10,10 @@ class Show
     Timeline.new all
   end
 
+  def self.cache_timeline
+    timeline.cache
+  end
+
   def date
     Chronic.parse super
   end
