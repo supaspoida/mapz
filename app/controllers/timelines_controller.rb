@@ -1,5 +1,5 @@
 class TimelinesController < ApplicationController
-  expose(:timeline) { Show.timeline }
+  expose(:timeline) { TimelineCache.first }
   respond_to :json
 
   def index
