@@ -6,7 +6,7 @@ class Timeline < SimpleDelegator
   end
 
   def cache
-    TimelineCache.create self
+    TimelineCache.refresh self
   end
 
   def group
