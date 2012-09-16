@@ -42,7 +42,8 @@ $ ->
     colorScale = d3.scale.quantize().domain([1, maxShowsPerYear]).range colors
 
     click = (d) ->
-      g.transition().duration(750).attrTween "d", arcTween(d)
+      if d.children
+        g.transition().duration(750).attrTween "d", arcTween(d)
 
     g = svg.data([json])
            .selectAll('path')
