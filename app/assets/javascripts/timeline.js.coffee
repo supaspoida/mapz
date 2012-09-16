@@ -32,14 +32,17 @@ $ ->
   ]
 
   arc = d3.svg.arc()
-    .startAngle((d) -> angleScale(d.x))
-    .endAngle((d) -> angleScale(d.x + d.dx))
+    .startAngle((d) -> Math.max 0, Math.min(2 * Math.PI, angleScale(d.x)))
+    .endAngle((d) -> Math.max 0, Math.min(2 * Math.PI, angleScale(d.x + d.dx)))
     .innerRadius((d) -> ringMap[d.depth].innerRadius)
     .outerRadius((d) -> ringMap[d.depth].outerRadius)
 
   d3.json "/timelines", (json) ->
     maxShowsPerYear = d3.max json.children, (d) -> d.size
     colorScale = d3.scale.quantize().domain([1, maxShowsPerYear]).range colors
+
+    click = (d) ->
+      g.transition().duration(750).attrTween "d", arcTween(d)
 
     g = svg.data([json])
            .selectAll('path')
@@ -50,8 +53,21 @@ $ ->
            .attr('stroke', darkestColor)
            .attr('data-value', (d) -> d.value)
            .attr('title', (d) -> d.name)
+           .on('click', click)
            .style "fill", (d) ->
              if d.depth == 0
                darkestColor
              else
                colorScale d.size
+
+  arcTween = (d) ->
+    xd = d3.interpolate(angleScale.domain(), [d.x, d.x + d.dx])
+    yd = d3.interpolate(radiusScale.domain(), [d.y, 1])
+    yr = d3.interpolate(radiusScale.range(), [(if d.y then 20 else 0), radius])
+    (d, i) ->
+      if i then (t) ->
+        arc d
+      else (t) ->
+        angleScale.domain xd(t)
+        radiusScale.domain(yd(t)).range yr(t)
+        arc d
