@@ -17,22 +17,22 @@ $ ->
           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
 
   partition = d3.layout.partition()
-  partition.size([2 * Math.PI, radius * radius])
   partition.sort (a,b) ->
     d3.ascending a.sortKey, b.sortKey
   partition.value (d) -> d.size
 
-  scale = d3.scale.linear().range([0,radius]).domain([0,1])
+  angleScale  = d3.scale.linear().range([0, 2 * Math.PI])
+  radiusScale = d3.scale.linear().range([0,radius]).domain([0,1])
 
   ringMap = [
-    { innerRadius: scale(0), outerRadius: scale(0) }
-    { innerRadius: scale(.20), outerRadius: scale(.60) }
-    { innerRadius: scale(.65), outerRadius: scale(.95) }
+    { innerRadius: radiusScale(0), outerRadius: radiusScale(0) }
+    { innerRadius: radiusScale(.20), outerRadius: radiusScale(.60) }
+    { innerRadius: radiusScale(.66), outerRadius: radiusScale(.95) }
   ]
 
   arc = d3.svg.arc()
-    .startAngle((d) -> d.x)
-    .endAngle((d) -> d.x + d.dx)
+    .startAngle((d) -> angleScale(d.x))
+    .endAngle((d) -> angleScale(d.x + d.dx))
     .innerRadius((d) -> ringMap[d.depth].innerRadius)
     .outerRadius((d) -> ringMap[d.depth].outerRadius)
 
