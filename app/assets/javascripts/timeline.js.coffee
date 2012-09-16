@@ -8,6 +8,7 @@ $ ->
     "#ff745c", "#ff6347", "#ff5233", "#ff401f", "#ff2f0a", "#f52500",
     "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
   ]
+  darkestColor = colors[colors.length-1]
 
   svg = d3.select('#timeline')
           .append('svg')
@@ -25,7 +26,7 @@ $ ->
   radiusScale = d3.scale.linear().range([0,radius]).domain([0,1])
 
   ringMap = [
-    { innerRadius: radiusScale(0), outerRadius: radiusScale(0) }
+    { innerRadius: radiusScale(0), outerRadius: radiusScale(.10) }
     { innerRadius: radiusScale(.20), outerRadius: radiusScale(.60) }
     { innerRadius: radiusScale(.66), outerRadius: radiusScale(.95) }
   ]
@@ -46,8 +47,11 @@ $ ->
            .enter()
            .append('path')
            .attr('d', arc)
-           .attr("display", (d) -> "none" if d.depth == 0)
-           .attr('stroke', colors[colors.length-1])
+           .attr('stroke', darkestColor)
            .attr('data-value', (d) -> d.value)
            .attr('title', (d) -> d.name)
-           .style "fill", (d) -> colorScale(d.size)
+           .style "fill", (d) ->
+             if d.depth == 0
+               darkestColor
+             else
+               colorScale d.size
