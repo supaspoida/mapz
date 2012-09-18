@@ -15,7 +15,7 @@ $ ->
           .attr('width', width)
           .attr('height', height)
           .append("g")
-          .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+          .attr("transform", "translate(#{radius},#{height / 2})")
 
   partition = d3.layout.partition()
   partition.sort (a,b) ->
