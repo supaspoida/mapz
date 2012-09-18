@@ -11,16 +11,16 @@ $ ->
   darkestColor = colors[colors.length-1]
 
   svg = d3.select('#timeline')
-          .append('svg')
-          .attr('width', width)
-          .attr('height', height)
-          .append("g")
-          .attr("transform", "translate(#{radius},#{height / 2})")
+    .append('svg')
+    .attr('width', width)
+    .attr('height', height)
+    .append("g")
+    .attr("transform", "translate(#{radius},#{height / 2})")
 
   partition = d3.layout.partition()
-  partition.sort (a,b) ->
-    d3.ascending a.sortKey, b.sortKey
-  partition.value (d) -> d.size
+    .sort (a,b) ->
+      d3.ascending a.sortKey, b.sortKey
+    .value (d) -> d.size
 
   angleScale  = d3.scale.linear().range([0, 2 * Math.PI])
   radiusScale = d3.scale.linear().range([0,radius]).domain([0,1])
@@ -56,16 +56,16 @@ $ ->
         colorScale.domain([1, maxShows]) d.size
 
     g = svg.data([json])
-           .selectAll('path')
-           .data(partition.nodes)
-           .enter()
-           .append('path')
-           .attr('d', arc)
-           .attr('stroke', darkestColor)
-           .attr('data-value', (d) -> d.value)
-           .attr('title', (d) -> d.name)
-           .on('click', click)
-           .style "fill", getColor
+      .selectAll('path')
+      .data(partition.nodes)
+      .enter()
+      .append('path')
+      .attr('d', arc)
+      .attr('stroke', darkestColor)
+      .attr('data-value', (d) -> d.value)
+      .attr('title', (d) -> d.name)
+      .on('click', click)
+      .style "fill", getColor
 
   arcTween = (d) ->
     xd = d3.interpolate(angleScale.domain(), [d.x, d.x + d.dx])
