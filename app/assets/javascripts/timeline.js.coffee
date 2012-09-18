@@ -42,7 +42,7 @@ $ ->
 
     click = (d) ->
       if d.children
-        g.transition().duration(750).attrTween "d", arcTween(d)
+        path.transition().duration(750).attrTween "d", arcTween(d)
 
     getColor = (d) ->
       maxShows = if d.parent
@@ -55,7 +55,7 @@ $ ->
       else
         colorScale.domain([1, maxShows]) d.size
 
-    g = svg.data([json])
+    path = svg.data([json])
       .selectAll('path')
       .data(partition.nodes)
       .enter()
