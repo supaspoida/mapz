@@ -2,7 +2,7 @@ class Timeline < SimpleDelegator
   include ActiveAttr::BasicModel
 
   def initialize(shows)
-    super({ name: 'shows', children: group[shows] })
+    super({ name: "#{shows.count} shows", children: group[shows] })
   end
 
   def cache
@@ -12,12 +12,14 @@ class Timeline < SimpleDelegator
   def group
     ->(shows) {
       shows.group_by(&:year).map do |year,shows|
-        { name: year,
-          sortKey: Chronic.parse("Jan 1 %s" % year),
+        { sortKey: Chronic.parse("Jan 1 %s" % year),
           size: shows.count,
+          name: "%s (%s shows)" % [year, shows.count],
           children: shows.group_by(&:month).map do |m,s|
             month = Chronic.parse("%s %s" % [m, year])
-            { name: month.strftime("%b"), size: s.count, sortKey: month }
+            { name: "%s (%s shows)" % [month.strftime("%B #{year}"), s.count],
+              size: s.count,
+              sortKey: month }
           end
         }
       end
