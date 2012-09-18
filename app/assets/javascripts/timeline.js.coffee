@@ -1,5 +1,5 @@
 $ ->
-  timeline = $('#timeline')
+  nav = $('#nav')
   width = $(document).width()
   height = $(document).height()
   radius = (Math.min(width, height) / 2)
@@ -10,7 +10,7 @@ $ ->
   ]
   darkestColor = colors[colors.length-1]
 
-  svg = d3.select('#timeline')
+  svg = d3.select('#nav')
     .append('svg')
     .attr('width', width)
     .attr('height', height)
