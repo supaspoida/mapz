@@ -55,6 +55,9 @@ $ ->
       else
         colorScale.domain([1, maxShows]) d.size
 
+    hover = (d) ->
+      $('#meta').text d.name
+
     path = svg.data([json])
       .selectAll('path')
       .data(partition.nodes)
@@ -65,6 +68,7 @@ $ ->
       .attr('data-value', (d) -> d.value)
       .attr('title', (d) -> d.name)
       .on('click', click)
+      .on('mouseover', hover)
       .style "fill", getColor
 
   arcTween = (d) ->
