@@ -38,18 +38,22 @@ $ ->
     .outerRadius((d) -> ringMap[d.depth].outerRadius)
 
   d3.json "/timelines", (json) ->
-    maxShowsPerYear = d3.max json.children, (d) -> d.size
-    colorScale = d3.scale.quantize().domain([1, maxShowsPerYear]).range colors
+    colorScale = d3.scale.quantize().range colors
 
     click = (d) ->
       if d.children
         g.transition().duration(750).attrTween "d", arcTween(d)
 
     getColor = (d) ->
+      maxShows = if d.parent
+        d3.max d.parent.children, (d) -> d.size
+      else
+        d3.max d.children, (d) -> d.size
+
       if d.depth == 0
         darkestColor
       else
-        colorScale d.size
+        colorScale.domain([1, maxShows]) d.size
 
     g = svg.data([json])
            .selectAll('path')
