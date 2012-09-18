@@ -45,6 +45,12 @@ $ ->
       if d.children
         g.transition().duration(750).attrTween "d", arcTween(d)
 
+    getColor = (d) ->
+      if d.depth == 0
+        darkestColor
+      else
+        colorScale d.size
+
     g = svg.data([json])
            .selectAll('path')
            .data(partition.nodes)
@@ -55,11 +61,7 @@ $ ->
            .attr('data-value', (d) -> d.value)
            .attr('title', (d) -> d.name)
            .on('click', click)
-           .style "fill", (d) ->
-             if d.depth == 0
-               darkestColor
-             else
-               colorScale d.size
+           .style "fill", getColor
 
   arcTween = (d) ->
     xd = d3.interpolate(angleScale.domain(), [d.x, d.x + d.dx])
