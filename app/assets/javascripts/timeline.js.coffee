@@ -63,12 +63,8 @@ $ ->
 
   arcTween = (d) ->
     xd = d3.interpolate(angleScale.domain(), [d.x, d.x + d.dx])
-    yd = d3.interpolate(radiusScale.domain(), [d.y, 1])
-    yr = d3.interpolate(radiusScale.range(), [(if d.y then 20 else 0), radius])
     (d, i) ->
-      if i then (t) ->
-        arc d
+      if i then (t) -> arc d
       else (t) ->
         angleScale.domain xd(t)
-        radiusScale.domain(yd(t)).range yr(t)
         arc d
