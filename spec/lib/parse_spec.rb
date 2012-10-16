@@ -24,7 +24,9 @@ describe Parse do
     let(:shows) { parser.shows }
 
     context 'first show' do
-      subject { shows.first }
+      let(:show) { shows.first }
+
+      subject { show }
 
       its(:title) { should == "08/21/03 - Croc Rock - Patio, Allentown, PA" }
       its(:city)  { should == "Allentown" }
@@ -32,10 +34,18 @@ describe Parse do
       its(:venue) { should == "Croc Rock - Patio" }
       its(:state) { should == "PA" }
       its(:phantasy_tour_id) { should == "1" }
+
+      describe '#attributes' do
+        subject { show.attributes }
+
+        it { should have_key :phantasy_tour_id }
+      end
     end
 
     context 'second show' do
-      subject { shows.last }
+      let(:show) { shows.last }
+
+      subject { show }
 
       its(:title) { should == "08/22/03 - Bay Center, Dewey Beach, DE" }
       its(:city)  { should == "Dewey Beach" }
@@ -43,6 +53,12 @@ describe Parse do
       its(:venue) { should == "Bay Center" }
       its(:state) { should == "DE" }
       its(:phantasy_tour_id) { should == "2" }
+
+      describe '#attributes' do
+        subject { show.attributes }
+
+        it { should have_key :phantasy_tour_id }
+      end
     end
   end
 end

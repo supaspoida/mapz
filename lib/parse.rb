@@ -44,6 +44,10 @@ class Parse < Struct.new(:raw_json)
       super Title.new attributes['title']
     end
 
+    def attributes
+      super.merge phantasy_tour_id: phantasy_tour_id
+    end
+
     def title
       inspect
     end
