@@ -16,10 +16,6 @@ class Parse < Struct.new(:raw_json)
     JSON.parse raw_json
   end
 
-  def json
-    JSON.parse raw_json
-  end
-
   def shows
     json.map &Show.method(:new)
   end
@@ -43,15 +39,14 @@ class Parse < Struct.new(:raw_json)
   class Show < SimpleDelegator
     attr_reader :phantasy_tour_id
 
-    def title
-      inspect
-    end
-
     def initialize(attributes)
       @phantasy_tour_id = attributes['phantasyTourId']
       super Title.new attributes['title']
     end
 
+    def title
+      inspect
+    end
   end
 
   class Title < SimpleDelegator
