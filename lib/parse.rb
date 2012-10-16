@@ -41,12 +41,14 @@ class Parse < Struct.new(:raw_json)
   end
 
   class Show < SimpleDelegator
+    attr_reader :phantasy_tour_id
 
     def title
       inspect
     end
 
     def initialize(attributes)
+      @phantasy_tour_id = attributes['phantasyTourId']
       super Title.new attributes['title']
     end
 
