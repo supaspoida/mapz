@@ -1,6 +1,6 @@
 $ ->
   timeline = new Timeline
-  timeline.render()
+  timeline.render('#nav')
 
 window.Timeline = class Timeline
   colors: [
@@ -12,14 +12,14 @@ window.Timeline = class Timeline
   radius: (width, height) ->
     Math.min(width, height) / 2
 
-  render: ->
+  render: (selector) ->
     width = $(document).width()
     height = $(document).height()
     radius = @radius(width, height)
     colors = @colors
     darkestColor = colors[colors.length-1]
 
-    svg = d3.select('#nav')
+    svg = d3.select(selector)
       .append('svg')
       .attr('width', width)
       .attr('height', height)
@@ -87,4 +87,3 @@ window.Timeline = class Timeline
         else (t) ->
           angleScale.domain xd(t)
           arc d
-
