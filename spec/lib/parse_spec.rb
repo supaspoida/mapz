@@ -5,8 +5,17 @@ describe Parse do
   let(:text) do
     <<-json
       [
-        { "title": "08/21/03 - Croc Rock - Patio - Allentown, PA", "phantasyTourId": "1"},
-        { "title": "08/22/03 - Bay Center - Dewey Beach, DE", "phantasyTourId": "2" }
+        {
+          "title": "08/21/03 - Croc Rock - Patio - Allentown, PA",
+          "phantasyTourId": "1",
+          "songs": [
+            { "name": "Basis", "segue": true, "set": "1" },
+            { "name": "ATW", "segue": false, "set": "Encore" }
+          ]
+        }, {
+          "title": "08/22/03 - Bay Center - Dewey Beach, DE",
+          "phantasyTourId": "2"
+        }
       ]
     json
   end
@@ -34,6 +43,8 @@ describe Parse do
       its(:venue) { should == "Croc Rock - Patio" }
       its(:state) { should == "PA" }
       its(:phantasy_tour_id) { should == "1" }
+
+      it { should have(2).songs }
 
       describe '#attributes' do
         subject { show.attributes }

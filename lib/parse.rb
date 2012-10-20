@@ -37,15 +37,16 @@ class Parse < Struct.new(:raw_json)
   end
 
   class Show < SimpleDelegator
-    attr_reader :phantasy_tour_id
+    attr_reader :phantasy_tour_id, :songs
 
     def initialize(attributes)
       @phantasy_tour_id = attributes['phantasyTourId']
+      @songs = attributes['songs']
       super Title.new attributes['title']
     end
 
     def attributes
-      super.merge phantasy_tour_id: phantasy_tour_id
+      super.merge phantasy_tour_id: phantasy_tour_id, songs: songs
     end
 
     def title
