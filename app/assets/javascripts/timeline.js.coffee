@@ -3,16 +3,20 @@ $ ->
   timeline.render()
 
 window.Timeline = class Timeline
+  colors: [
+    "#ffdcd6", "#ffcbc2", "#ffbaad", "#ffa899", "#ff9785", "#ff8670",
+    "#ff745c", "#ff6347", "#ff5233", "#ff401f", "#ff2f0a", "#f52500",
+    "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
+  ]
+
+  radius: (width, height) ->
+    Math.min(width, height) / 2
+
   render: ->
-    nav = $('#nav')
     width = $(document).width()
     height = $(document).height()
-    radius = (Math.min(width, height) / 2)
-    colors = [
-      "#ffdcd6", "#ffcbc2", "#ffbaad", "#ffa899", "#ff9785", "#ff8670",
-      "#ff745c", "#ff6347", "#ff5233", "#ff401f", "#ff2f0a", "#f52500",
-      "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
-    ]
+    radius = @radius(width, height)
+    colors = @colors
     darkestColor = colors[colors.length-1]
 
     svg = d3.select('#nav')
