@@ -2,6 +2,26 @@ $ ->
   timeline = new Timeline
   timeline.render('#nav')
 
+window.Rings = class Rings
+  @map: [
+    { innerRadius:   0, outerRadius: .10 }
+    { innerRadius: .20, outerRadius: .60 }
+    { innerRadius: .66, outerRadius: .95 }
+  ]
+
+  @for: (radius) ->
+    radiusScale = d3.scale.linear().range([0,radius]).domain([0,1])
+    new @ radiusScale
+
+  constructor: (@radiusScale) ->
+
+  angleScale:  d3.scale.linear().range([0, 2 * Math.PI])
+
+  startAngle:  (d) => Math.max 0, Math.min(2 * Math.PI, @angleScale(d.x))
+  endAngle:    (d) => Math.max 0, Math.min(2 * Math.PI, @angleScale(d.x + d.dx))
+  innerRadius: (d) => @radiusScale Rings.map[d.depth].innerRadius
+  outerRadius: (d) => @radiusScale Rings.map[d.depth].outerRadius
+
 window.Timeline = class Timeline
   colors: [
     "#ffdcd6", "#ffcbc2", "#ffbaad", "#ffa899", "#ff9785", "#ff8670",
@@ -18,6 +38,7 @@ window.Timeline = class Timeline
     radius = @radius(width, height)
     colors = @colors
     darkestColor = colors[colors.length-1]
+    rings = Rings.for radius
 
     svg = d3.select(selector)
       .append('svg')
@@ -31,20 +52,11 @@ window.Timeline = class Timeline
         d3.ascending a.sortKey, b.sortKey
       .value (d) -> d.size
 
-    angleScale  = d3.scale.linear().range([0, 2 * Math.PI])
-    radiusScale = d3.scale.linear().range([0,radius]).domain([0,1])
-
-    ringMap = [
-      { innerRadius: radiusScale(0), outerRadius: radiusScale(.10) }
-      { innerRadius: radiusScale(.20), outerRadius: radiusScale(.60) }
-      { innerRadius: radiusScale(.66), outerRadius: radiusScale(.95) }
-    ]
-
     arc = d3.svg.arc()
-      .startAngle((d) -> Math.max 0, Math.min(2 * Math.PI, angleScale(d.x)))
-      .endAngle((d) -> Math.max 0, Math.min(2 * Math.PI, angleScale(d.x + d.dx)))
-      .innerRadius((d) -> ringMap[d.depth].innerRadius)
-      .outerRadius((d) -> ringMap[d.depth].outerRadius)
+      .startAngle(rings.startAngle)
+      .endAngle(rings.endAngle)
+      .innerRadius(rings.innerRadius)
+      .outerRadius(rings.outerRadius)
 
     d3.json "/timelines", (json) ->
       colorScale = d3.scale.quantize().range colors
@@ -81,9 +93,9 @@ window.Timeline = class Timeline
         .style "fill", getColor
 
     arcTween = (d) ->
-      xd = d3.interpolate(angleScale.domain(), [d.x, d.x + d.dx])
+      xd = d3.interpolate(rings.angleScale.domain(), [d.x, d.x + d.dx])
       (d, i) ->
         if i then (t) -> arc d
         else (t) ->
-          angleScale.domain xd(t)
+          rings.angleScale.domain xd(t)
           arc d
