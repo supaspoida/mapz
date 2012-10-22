@@ -36,6 +36,27 @@ window.Timeline = class Timeline
   radius: ->
     Math.min(@options.width, @options.height) / 2
 
+  svg: ->
+    d3.select(@options.selector)
+      .append('svg')
+      .attr('width', @options.width)
+      .attr('height', @options.height)
+      .append("g")
+      .attr("transform", "translate(#{@radius()},#{@options.height / 2})")
+
+  partition: ->
+    d3.layout.partition()
+      .sort (a,b) ->
+        d3.ascending a.sortKey, b.sortKey
+      .value (d) -> d.size
+
+  arc: (rings) ->
+    d3.svg.arc()
+      .startAngle(rings.startAngle)
+      .endAngle(rings.endAngle)
+      .innerRadius(rings.innerRadius)
+      .outerRadius(rings.outerRadius)
+
   render: (@options) ->
     width = @options.width
     height = @options.height
@@ -45,23 +66,9 @@ window.Timeline = class Timeline
     darkestColor = colors[colors.length-1]
     rings = Rings.for radius
 
-    svg = d3.select(selector)
-      .append('svg')
-      .attr('width', width)
-      .attr('height', height)
-      .append("g")
-      .attr("transform", "translate(#{radius},#{height / 2})")
-
-    partition = d3.layout.partition()
-      .sort (a,b) ->
-        d3.ascending a.sortKey, b.sortKey
-      .value (d) -> d.size
-
-    arc = d3.svg.arc()
-      .startAngle(rings.startAngle)
-      .endAngle(rings.endAngle)
-      .innerRadius(rings.innerRadius)
-      .outerRadius(rings.outerRadius)
+    svg = @svg()
+    partition = @partition()
+    arc = @arc(rings)
 
     d3.json "/timelines", (json) ->
       colorScale = d3.scale.quantize().range colors
