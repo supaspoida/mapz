@@ -79,12 +79,8 @@ window.Timeline = class Timeline
       .outerRadius(rings.outerRadius)
 
   render: (@options) ->
-    width = @options.width
-    height = @options.height
-    selector = @options.selector
-    radius = @radius()
     colors = new Colors
-    rings = Rings.for radius
+    rings = Rings.for @radius()
 
     svg = @svg()
     partition = @partition()
