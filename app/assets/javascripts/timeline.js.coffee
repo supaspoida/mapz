@@ -1,6 +1,10 @@
 $ ->
   timeline = new Timeline
-  timeline.render('#nav')
+  timeline.render
+    width: $(document).width()
+    height: $(document).height()
+    selector: '#nav'
+
 
 window.Rings = class Rings
   @map: [
@@ -29,13 +33,14 @@ window.Timeline = class Timeline
     "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
   ]
 
-  radius: (width, height) ->
-    Math.min(width, height) / 2
+  radius: ->
+    Math.min(@options.width, @options.height) / 2
 
-  render: (selector) ->
-    width = $(document).width()
-    height = $(document).height()
-    radius = @radius(width, height)
+  render: (@options) ->
+    width = @options.width
+    height = @options.height
+    selector = @options.selector
+    radius = @radius()
     colors = @colors
     darkestColor = colors[colors.length-1]
     rings = Rings.for radius
