@@ -26,6 +26,23 @@ window.Rings = class Rings
   innerRadius: (d) => @radiusScale Rings.map[d.depth].innerRadius
   outerRadius: (d) => @radiusScale Rings.map[d.depth].outerRadius
 
+  arc: ->
+    d3.svg.arc()
+      .startAngle(@startAngle)
+      .endAngle(@endAngle)
+      .innerRadius(@innerRadius)
+      .outerRadius(@outerRadius)
+
+  arcTween: (d) ->
+    arc = @arc()
+    scale = @angleScale
+    xd = d3.interpolate(scale.domain(), [d.x, d.x + d.dx])
+    (d, i) ->
+      if i then (t) -> arc d
+      else (t) ->
+        scale.domain xd(t)
+        arc d
+
 window.Colors = class Colors
   range: [
     "#ffdcd6", "#ffcbc2", "#ffbaad", "#ffa899", "#ff9785", "#ff8670",
@@ -71,25 +88,17 @@ window.Timeline = class Timeline
         d3.ascending a.sortKey, b.sortKey
       .value (d) -> d.size
 
-  arc: (rings) ->
-    d3.svg.arc()
-      .startAngle(rings.startAngle)
-      .endAngle(rings.endAngle)
-      .innerRadius(rings.innerRadius)
-      .outerRadius(rings.outerRadius)
-
   render: (@options) ->
     colors = new Colors
     rings = Rings.for @radius()
 
     svg = @svg()
     partition = @partition()
-    arc = @arc(rings)
 
     d3.json "/timelines", (json) ->
       click = (d) ->
         if d.children
-          path.transition().duration(750).attrTween "d", arcTween(d)
+          path.transition().duration(750).attrTween "d", rings.arcTween(d)
 
       hover = (d) ->
         $('#meta').text d.name
@@ -99,18 +108,10 @@ window.Timeline = class Timeline
         .data(partition.nodes)
         .enter()
         .append('path')
-        .attr('d', arc)
+        .attr('d', rings.arc())
         .attr('stroke', colors.darkest())
         .attr('data-value', (d) -> d.value)
         .attr('title', (d) -> d.name)
         .on('click', click)
         .on('mouseover', hover)
         .style "fill", colors.fill()
-
-    arcTween = (d) ->
-      xd = d3.interpolate(rings.angleScale.domain(), [d.x, d.x + d.dx])
-      (d, i) ->
-        if i then (t) -> arc d
-        else (t) ->
-          rings.angleScale.domain xd(t)
-          arc d
