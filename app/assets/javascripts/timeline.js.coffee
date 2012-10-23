@@ -1,11 +1,3 @@
-$ ->
-  timeline = new Timeline
-  timeline.render
-    width: $(document).width()
-    height: $(document).height()
-    selector: '#nav'
-
-
 window.Rings = class Rings
   @map: [
     { innerRadius:   0, outerRadius: .10 }
