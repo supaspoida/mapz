@@ -23,15 +23,12 @@ html, body, #map
       fill: steelblue
 
 .callout
-  +border-radius(20px)
-  border: 1px solid black
   display: none
   font-size: 28px
   left: 20px
   padding: 10px 0
   position: absolute
   top: 20px
-  width: 500px
 
   & > h1, .shows, .venues
     padding: 0 20px
@@ -58,6 +55,7 @@ html, body, #map
 
 #map
   height: 300px
+  position: relative
   .background
     fill: none
     pointer-events: all
