@@ -40,7 +40,7 @@ html, body, #map
   background-color: #ff5e1a
   overflow: auto
 
-#nav, #meta
+#nav, #meta, #map
   width: 50%
   float: left
 
@@ -55,3 +55,16 @@ html, body, #map
     fill-rule: evenodd
     stroke-width: 1
     stroke-opacity: .5
+
+#map
+  height: 300px
+  .background
+    fill: none
+    pointer-events: all
+
+  #states
+    fill: #ffdcd6
+    stroke: #ff5e1a
+    stroke-width: 1.5px
+    .active
+      fill: #8f1500
