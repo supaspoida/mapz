@@ -45,6 +45,9 @@ window.Colors = class Colors
   darkest: ->
     @range[@range.length-1]
 
+  lightest: ->
+    @range[0]
+
   scale: ->
     d3.scale.quantize().range @range
 

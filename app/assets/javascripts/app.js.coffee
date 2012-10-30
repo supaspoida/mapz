@@ -42,6 +42,7 @@ window.Map = class Map
         d3.max counts
 
       colors = new Map.Colors
+      lightest = colors.lightest()
 
       fill = (d) ->
         shows = data['2002']
@@ -51,14 +52,18 @@ window.Map = class Map
         scale.domain([0, maxShows]) shows[state]
 
       d3.json "/states.json", (json) ->
-        g.selectAll("path")
+        map = g.selectAll("path")
          .data(json.features)
          .enter()
          .append("path")
          .attr("d", path)
          .attr('id', (state) -> state.properties.name)
-         .attr('fill', fill)
+         .attr('fill', (d) -> lightest)
          .on("click", click)
+
+        map.transition()
+         .attr('fill', fill)
+         .duration(1000)
 
     click = (d) ->
       $('.callout').fadeOut()
