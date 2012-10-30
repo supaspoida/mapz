@@ -41,7 +41,7 @@ window.Map = class Map
         counts = (count for state, count of states)
         d3.max counts
 
-      colors = new Colors
+      colors = new Map.Colors
 
       fill = (d) ->
         shows = data['2002']
@@ -81,3 +81,9 @@ window.Map = class Map
        .duration(1000)
        .attr("transform", "scale(" + k + ")translate(" + x + "," + y + ")")
        .style "stroke-width", 1.5 / k + "px"
+
+window.Map.Colors = class extends Colors
+  range: [
+    "#ffbaad", "#ff745c", "#ff401f", "#ff2f0a", "#f52500",
+    "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
+  ]
