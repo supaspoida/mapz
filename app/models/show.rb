@@ -14,6 +14,10 @@ class Show
     timeline.cache
   end
 
+  def self.cache_all
+    ShowCache.refresh all.as_json
+  end
+
   def date
     Chronic.parse super
   end
@@ -36,6 +40,10 @@ class Show
 
   def year
     date.year
+  end
+
+  def as_json(args = {})
+    super args.merge(methods: :year, except: [:songs, :footnotes])
   end
 
 end

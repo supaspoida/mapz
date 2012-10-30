@@ -30,14 +30,35 @@ window.Map = class Map
            .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
            .append("g").attr("id", "states")
 
-    d3.json "/states.json", (json) ->
-      g.selectAll("path")
-       .data(json.features)
-       .enter()
-       .append("path")
-       .attr("d", path)
-       .attr('id', (state) -> state.properties.name)
-       .on("click", click)
+    d3.json '/shows.json', (json) ->
+      data = d3.nest()
+        .key((d) -> d.year)
+        .key((d) -> d.state)
+        .rollup((d) -> d.length)
+        .map(json)
+
+      maxPerState = for year, states of data
+        counts = (count for state, count of states)
+        d3.max counts
+
+      colors = new Colors
+
+      fill = (d) ->
+        shows = data['2002']
+        state = d.properties.name
+        scale = colors.scale()
+        maxShows = d3.max maxPerState
+        scale.domain([0, maxShows]) shows[state]
+
+      d3.json "/states.json", (json) ->
+        g.selectAll("path")
+         .data(json.features)
+         .enter()
+         .append("path")
+         .attr("d", path)
+         .attr('id', (state) -> state.properties.name)
+         .attr('fill', fill)
+         .on("click", click)
 
     click = (d) ->
       $('.callout').fadeOut()
