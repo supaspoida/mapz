@@ -57,7 +57,7 @@ window.Map = class Map
       axis = svg.append("g")
         .attr('fill', -> lightest)
         .attr("class", "axis")
-        .attr("transform", "translate(40,0)")
+        .attr("transform", "translate(50,0)")
         .call(yearAxis)
 
       maxPerState = for year, states of data
@@ -80,14 +80,18 @@ window.Map = class Map
          .append("path")
          .attr("d", path)
          .attr('id', (state) -> state.properties.name)
-         .attr('fill', (d) -> lightest)
+         .style('fill', (d) -> lightest)
          .on("click", click)
 
-        transitionTo = (year) ->
-          map.attr('fill', -> '#fff')
+        transition = (fill, callback) ->
           map.transition()
-           .attr('fill', fill(year))
-           .duration(500)
+           .style('fill', fill)
+           .duration(250)
+           .each('end', callback)
+
+        transitionTo = (year) ->
+          transition lightest, ->
+            transition fill(year)
 
         axis.selectAll('text')
           .on 'mouseover', (d) ->
