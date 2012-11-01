@@ -15,7 +15,6 @@ window.Map = class Map
     width = $('#map').width()
     height = $('#map').height()
     padding = 30
-    centered = undefined
 
     projection = d3.geo.albersUsa().scale(width).translate([ 0, 0 ])
     path = d3.geo.path().projection projection
@@ -30,7 +29,6 @@ window.Map = class Map
        .attr("class", "background")
        .attr("width", width)
        .attr("height", height)
-       .on "click", click
 
     g = svg.append("g")
            .attr("transform", "translate(#{width / 2 + 44},#{height / 2})")
@@ -81,7 +79,6 @@ window.Map = class Map
          .attr("d", path)
          .attr('id', (state) -> state.properties.name)
          .style('fill', (d) -> lightest)
-         .on("click", click)
 
         transition = (fill, callback) ->
           map.transition()
@@ -99,28 +96,6 @@ window.Map = class Map
             transitionTo year
 
         transitionTo '1995'
-
-    click = (d) ->
-      $('.callout').fadeOut()
-      x = 0
-      y = 0
-      k = 1
-      if d and centered isnt d
-        centroid = path.centroid(d)
-        x = -centroid[0]
-        y = -centroid[1]
-        k = 4
-        centered = d
-        $("##{d.properties.name}.callout").fadeIn()
-      else
-        centered = null
-      g.selectAll("path").classed "active", centered and (d) ->
-        d is centered
-
-      g.transition()
-       .duration(1000)
-       .attr("transform", "scale(" + k + ")translate(" + x + "," + y + ")")
-       .style "stroke-width", 1.5 / k + "px"
 
 window.Map.Colors = class extends Colors
   range: [
