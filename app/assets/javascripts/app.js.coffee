@@ -10,6 +10,9 @@ $ ->
 
   map = new Map
 
+window.Log = (obj) ->
+  console.log JSON.stringify(obj, undefined, 4)
+
 window.Map = class Map
   constructor: ->
     width = $('#map').width()
