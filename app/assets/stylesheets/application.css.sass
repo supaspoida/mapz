@@ -54,7 +54,7 @@ html, body, #map
     stroke-opacity: .5
 
 #map
-  height: 300px
+  height: 370px
   position: relative
   .background
     fill: none
@@ -66,3 +66,16 @@ html, body, #map
     stroke-width: 1.5px
     .active
       fill: #8f1500
+
+.axis path,
+.axis line
+  fill: none
+  stroke: none
+  shape-rendering: crispEdges
+
+.axis text
+  font-family: sans-serif
+  font-size: 14px
+  cursor: pointer
+  &:hover
+    fill: #fff

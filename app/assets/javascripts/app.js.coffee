@@ -14,6 +14,7 @@ window.Map = class Map
   constructor: ->
     width = $('#map').width()
     height = $('#map').height()
+    padding = 20
     centered = undefined
 
     projection = d3.geo.albersUsa().scale(width).translate([ 0, 0 ])
@@ -37,19 +38,40 @@ window.Map = class Map
         .rollup((d) -> d.length)
         .map(json)
 
+      colors = new Map.Colors
+      lightest = colors.lightest()
+
+      years = d3.keys data
+      [firstYear, lastYear] = [d3.first(years), d3.last(years)]
+
+      yScale = d3.scale.linear()
+        .domain([firstYear, lastYear])
+        .range([padding, height - padding * 2])
+
+      yearAxis = d3.svg.axis()
+        .scale(yScale)
+        .orient("left")
+        .ticks(years.length)
+        .tickFormat (d) -> d
+
+      axis = svg.append("g")
+        .attr('fill', -> lightest)
+        .attr("class", "axis")
+        .attr("transform", "translate(40,0)")
+        .call(yearAxis)
+
       maxPerState = for year, states of data
         counts = (count for state, count of states)
         d3.max counts
 
-      colors = new Map.Colors
-      lightest = colors.lightest()
-
-      fill = (d) ->
-        shows = data['2002']
-        state = d.properties.name
-        scale = colors.scale()
-        maxShows = d3.max maxPerState
-        scale.domain([0, maxShows]) shows[state]
+      fill = (year) ->
+        if year
+          shows = data[year]
+          (d) ->
+            state = d.properties.name
+            scale = colors.scale()
+            maxShows = d3.max maxPerState
+            scale.domain([0, maxShows]) shows[state]
 
       d3.json "/states.json", (json) ->
         map = g.selectAll("path")
@@ -61,9 +83,18 @@ window.Map = class Map
          .attr('fill', (d) -> lightest)
          .on("click", click)
 
-        map.transition()
-         .attr('fill', fill)
-         .duration(1000)
+        transitionTo = (year) ->
+          map.attr('fill', -> '#fff')
+          map.transition()
+           .attr('fill', fill(year))
+           .duration(500)
+
+        axis.selectAll('text')
+          .on 'mouseover', (d) ->
+            year = $(@).text()
+            transitionTo year
+
+        transitionTo '1995'
 
     click = (d) ->
       $('.callout').fadeOut()
