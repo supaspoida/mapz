@@ -20,11 +20,6 @@ window.Map = class Map
     path = d3.geo.path().projection projection
     svg = d3.select('#map').append('svg').attr('width', width).attr 'height', height
 
-    control = d3.select('#yearsControl')
-      .append('svg')
-      .attr('width', $(document).width())
-      .attr 'height', $(document).height()
-
     svg.append("rect")
        .attr("class", "background")
        .attr("width", width)
@@ -44,19 +39,12 @@ window.Map = class Map
       colors = new Map.Colors
       lightest = colors.lightest()
 
-      years = d3.keys data
-
-      yearsControl = new Map.Years
-        years: years, padding: padding,
+      years = new Map.Years
+        years: d3.keys(data)
+        padding: padding
         height: $(document).height()
+        colors: colors
         width: $(document).width()
-
-
-      axis = control.append("g")
-        .attr('fill', -> lightest)
-        .attr("class", "axis")
-        .attr("transform", -> "translate(#{(yearsControl.width / 2)},#{padding / 2})")
-        .call(yearsControl.axis())
 
       maxPerState = for year, states of data
         counts = (count for state, count of states)
@@ -90,6 +78,7 @@ window.Map = class Map
           transition lightest, ->
             transition fill(year)
 
+        axis = years.render()
         axis.selectAll('text')
           .on 'mouseover', (d) ->
             year = $(@).text()
@@ -109,6 +98,13 @@ window.Map.Years = class Years
     @padding = options['padding']
     @height = options['height']
     @width = options['width']
+    @colors = options['colors']
+
+  path: ->
+    d3.select('#yearsControl')
+      .append('svg')
+      .attr('width', @width)
+      .attr 'height', @height
 
   firstYear: ->
     d3.first @years
@@ -127,3 +123,10 @@ window.Map.Years = class Years
       .orient("right")
       .ticks(@years.length)
       .tickFormat (d) -> d
+
+  render: ->
+    @path().append("g")
+      .attr('fill', => @colors.lightest())
+      .attr("class", "axis")
+      .attr("transform", => "translate(#{(@width / 2)},#{@padding / 2})")
+      .call(@axis())
