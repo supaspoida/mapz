@@ -5,5 +5,5 @@ Mapz::Application.routes.draw do
 
   match '/ui(/:action)', controller: 'ui'
 
-  root to: 'ui#map'
+  root to: 'ui#timeline'
 end
