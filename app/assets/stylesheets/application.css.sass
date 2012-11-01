@@ -67,15 +67,23 @@ html, body, #map
     .active
       fill: #8f1500
 
+#yearsControl
+  position: absolute
+  height: 100%
+  pointer-events: none
+
 .axis path,
 .axis line
   fill: none
-  stroke: none
+  stroke: white
+  opacity: 0.5
   shape-rendering: crispEdges
 
 .axis text
+  pointer-events: auto
   font-family: sans-serif
-  font-size: 14px
+  font-size: 20px
   cursor: pointer
+  opacity: 0.8
   &:hover
     fill: #fff

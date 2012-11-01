@@ -14,12 +14,17 @@ window.Map = class Map
   constructor: ->
     width = $('#map').width()
     height = $('#map').height()
-    padding = 20
+    padding = 30
     centered = undefined
 
     projection = d3.geo.albersUsa().scale(width).translate([ 0, 0 ])
     path = d3.geo.path().projection projection
     svg = d3.select('#map').append('svg').attr('width', width).attr 'height', height
+
+    control = d3.select('#yearsControl')
+      .append('svg')
+      .attr('width', $(document).width())
+      .attr 'height', $(document).height()
 
     svg.append("rect")
        .attr("class", "background")
@@ -28,7 +33,7 @@ window.Map = class Map
        .on "click", click
 
     g = svg.append("g")
-           .attr("transform", "translate(" + width / 2 + "," + height / 2 + ")")
+           .attr("transform", "translate(#{width / 2 + 44},#{height / 2})")
            .append("g").attr("id", "states")
 
     d3.json '/shows.json', (json) ->
@@ -42,23 +47,18 @@ window.Map = class Map
       lightest = colors.lightest()
 
       years = d3.keys data
-      [firstYear, lastYear] = [d3.first(years), d3.last(years)]
 
-      yScale = d3.scale.linear()
-        .domain([firstYear, lastYear])
-        .range([padding, height - padding * 2])
+      yearsControl = new Map.Years
+        years: years, padding: padding,
+        height: $(document).height()
+        width: $(document).width()
 
-      yearAxis = d3.svg.axis()
-        .scale(yScale)
-        .orient("left")
-        .ticks(years.length)
-        .tickFormat (d) -> d
 
-      axis = svg.append("g")
+      axis = control.append("g")
         .attr('fill', -> lightest)
         .attr("class", "axis")
-        .attr("transform", "translate(50,0)")
-        .call(yearAxis)
+        .attr("transform", -> "translate(#{(yearsControl.width / 2)},#{padding / 2})")
+        .call(yearsControl.axis())
 
       maxPerState = for year, states of data
         counts = (count for state, count of states)
@@ -127,3 +127,28 @@ window.Map.Colors = class extends Colors
     "#ffbaad", "#ff745c", "#ff401f", "#ff2f0a", "#f52500",
     "#e02200", "#cc1f00", "#b81c00", "#a31800", "#8f1500"
   ]
+
+window.Map.Years = class Years
+  constructor: (options={}) ->
+    @years = options['years']
+    @padding = options['padding']
+    @height = options['height']
+    @width = options['width']
+
+  firstYear: ->
+    d3.first @years
+
+  lastYear: ->
+    d3.last @years
+
+  yScale: ->
+    d3.scale.linear()
+      .domain([@firstYear(), @lastYear()])
+      .range([@padding, @height - (@padding * 2)])
+
+  axis: ->
+    d3.svg.axis()
+      .scale(@yScale())
+      .orient("right")
+      .ticks(@years.length)
+      .tickFormat (d) -> d
