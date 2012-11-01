@@ -9,19 +9,38 @@ $ ->
     selector: '#nav'
 
   map = new Map
+  map.render
+    width: $('#map').width()
+    height: $('#map').height()
+    selector: '#map'
 
 window.Log = (obj) ->
   console.log JSON.stringify(obj, undefined, 4)
 
 window.Map = class Map
-  constructor: ->
-    width = $('#map').width()
-    height = $('#map').height()
+  projection: ->
+    d3.geo.albersUsa()
+      .scale(@options.width)
+      .translate([0,0])
+
+  path: ->
+    d3.geo.path().projection @projection()
+
+  svg: ->
+    d3.select(@options.selector)
+      .append('svg')
+      .attr('width', @options.width)
+      .attr('height', @options.height)
+
+  render: (@options) ->
+    width = @options.width
+    height = @options.height
     padding = 30
 
-    projection = d3.geo.albersUsa().scale(width).translate([ 0, 0 ])
-    path = d3.geo.path().projection projection
-    svg = d3.select('#map').append('svg').attr('width', width).attr 'height', height
+    projection = @projection()
+
+    path = @path()
+    svg = @svg()
 
     svg.append("rect")
        .attr("class", "background")
