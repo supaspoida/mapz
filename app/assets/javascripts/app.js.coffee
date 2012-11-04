@@ -128,15 +128,15 @@ window.Map.Years = class Years
       .attr('width', @width)
       .attr 'height', @height
 
-  firstYear: ->
+  first: ->
     d3.first @years
 
-  lastYear: ->
+  last: ->
     d3.last @years
 
   yScale: ->
     d3.scale.linear()
-      .domain([@firstYear(), @lastYear()])
+      .domain([@first(), @last()])
       .range([@padding, @height - (@padding * 2)])
 
   axis: ->
