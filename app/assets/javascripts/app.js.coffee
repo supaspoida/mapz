@@ -107,11 +107,9 @@ window.Map = class Map
 
         axis = years.render()
         axis.selectAll('text')
-          .on 'mouseover', (d) ->
-            year = $(@).text()
+          .on 'mouseover', (year) ->
             transitionTo year
-          .on 'click', (d) ->
-            year = $(@).text()
+          .on 'click', (year) ->
             dispatch.changeYear year
 
 window.Map.Colors = class extends Colors
