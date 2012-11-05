@@ -14,6 +14,7 @@ class Timeline < SimpleDelegator
       shows.group_by(&:year).map do |year,shows|
         { sortKey: Chronic.parse("Jan 1 %s" % year),
           size: shows.count,
+          year: year,
           name: "%s (%s shows)" % [year, shows.count],
           children: shows.group_by(&:month).map do |m,s|
             month = Chronic.parse("%s %s" % [m, year])

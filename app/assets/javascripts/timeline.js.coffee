@@ -86,6 +86,7 @@ window.Timeline = class Timeline
   render: (@options) ->
     colors = new Colors
     rings = Rings.for @radius()
+    dispatch = @options.dispatch
 
     svg = @svg()
     partition = @partition()
@@ -107,6 +108,11 @@ window.Timeline = class Timeline
         .attr('stroke', colors.darkest())
         .attr('data-value', (d) -> d.value)
         .attr('title', (d) -> d.name)
+        .attr('id', (d) -> "year-#{d.year}")
         .on('click', click)
         .on('mouseover', hover)
         .style "fill", colors.fill()
+
+      dispatch.on 'changeYear.timeline', (year) ->
+        d3.selectAll("#year-#{year}").each (d) ->
+          click.apply @, [d]

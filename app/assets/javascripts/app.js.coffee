@@ -2,17 +2,21 @@
 #= require 'timeline'
 
 $ ->
+  dispatch = d3.dispatch 'changeYear'
+
   timeline = new Timeline
   timeline.render
     width: $(document).width()
     height: $(document).height()
     selector: '#nav'
+    dispatch: dispatch
 
   map = new Map
   map.render
     width: $('#map').width()
     height: $('#map').height()
     selector: '#map'
+    dispatch: dispatch
 
 window.Log = (obj) ->
   console.log JSON.stringify(obj, undefined, 4)
@@ -36,6 +40,7 @@ window.Map = class Map
     width = @options.width
     height = @options.height
     padding = 30
+    dispatch = @options.dispatch
 
     projection = @projection()
 
@@ -105,8 +110,9 @@ window.Map = class Map
           .on 'mouseover', (d) ->
             year = $(@).text()
             transitionTo year
-
-        transitionTo '1995'
+          .on 'click', (d) ->
+            year = $(@).text()
+            dispatch.changeYear year
 
 window.Map.Colors = class extends Colors
   range: [
