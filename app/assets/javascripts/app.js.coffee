@@ -119,8 +119,6 @@ window.Map = class Map
 
         axis = years.render()
         axis.selectAll('text')
-          .on 'mouseover', (year) ->
-            transitionTo year
           .on 'click', (year) ->
             dispatch.changeYear year
 
