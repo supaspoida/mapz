@@ -92,9 +92,14 @@ window.Timeline = class Timeline
     partition = @partition()
 
     d3.json "/timelines", (json) ->
-      click = (d) ->
+      transition = (d) ->
         if d.children
           path.transition().duration(750).attrTween "d", rings.arcTween(d)
+
+      click = (d) ->
+        transition d
+        if d.depth < 2
+          dispatch.changeYear d.year
 
       hover = (d) ->
         $('#meta').text d.name
@@ -115,4 +120,4 @@ window.Timeline = class Timeline
 
       dispatch.on 'changeYear.timeline', (year) ->
         d3.selectAll("#year-#{year}").each (d) ->
-          click.apply @, [d]
+          transition.apply @, [d]

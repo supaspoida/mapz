@@ -122,9 +122,17 @@ window.Map = class Map
           .on 'click', (year) ->
             dispatch.changeYear year
 
-        map.transition()
-         .style('fill', fillAllStates)
-         .duration(250)
+        resetMap = ->
+          transition lightest, ->
+            transition fillAllStates
+
+        transition fillAllStates
+
+        dispatch.on 'changeYear.map', (year) ->
+          if year
+            transitionTo year
+          else
+            resetMap()
 
 window.Map.Colors = class extends Colors
   range: [
