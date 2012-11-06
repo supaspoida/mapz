@@ -63,6 +63,11 @@ window.Map = class Map
         .rollup((d) -> d.length)
         .map(json)
 
+      showsByState = d3.nest()
+        .key((d) -> d.state)
+        .rollup((d) -> d.length)
+        .map(json)
+
       colors = new Map.Colors
       lightest = colors.lightest()
 
@@ -77,7 +82,7 @@ window.Map = class Map
         counts = (count for state, count of states)
         d3.max counts
 
-      fill = (year) ->
+      fillByYear = (year) ->
         if year
           shows = data[year]
           (d) ->
@@ -85,6 +90,13 @@ window.Map = class Map
             scale = colors.scale()
             maxShows = d3.max maxPerState
             scale.domain([0, maxShows]) shows[state]
+
+      fillAllStates = (d) ->
+        shows = showsByState
+        state = d.properties.name
+        maxShows = d3.max d3.values(shows)
+        scale = colors.scale()
+        scale.domain([0, maxShows]) shows[state]
 
       d3.json "/states.json", (json) ->
         map = g.selectAll("path")
@@ -103,7 +115,7 @@ window.Map = class Map
 
         transitionTo = (year) ->
           transition lightest, ->
-            transition fill(year)
+            transition fillByYear(year)
 
         axis = years.render()
         axis.selectAll('text')
@@ -111,6 +123,10 @@ window.Map = class Map
             transitionTo year
           .on 'click', (year) ->
             dispatch.changeYear year
+
+        map.transition()
+         .style('fill', fillAllStates)
+         .duration(250)
 
 window.Map.Colors = class extends Colors
   range: [
